@@ -54,7 +54,7 @@ export default {
     return {
       toConvert: "",
       converted: "",
-      exchangeRates: 1,
+      exchangeRates: undefined,
       fromExchangeRate: undefined,
       toExchangeRate: undefined
     };
@@ -68,11 +68,19 @@ export default {
 
   methods: {
     convert() {
+      // Check if both exchange rates are set
       if (this.fromExchangeRate != undefined && this.toExchangeRate) {
+        // Convert the given amount to USD, since the base currency of the api is USD
+        let toUSD =
+          this.toConvert /
+          parseFloat(this.exchangeRates[this.fromExchangeRate]);
+
+        // Convert the amount to the chosen currency
         this.converted =
-          (this.toConvert /
-            parseFloat(this.exchangeRates[this.fromExchangeRate])) *
-          parseFloat(this.exchangeRates[this.toExchangeRate]);
+          toUSD * parseFloat(this.exchangeRates[this.toExchangeRate]);
+
+        // Round the number down to two decimals
+        this.converted = Number(Math.round(this.converted + "e2") + "e-2");
       }
     }
   }

@@ -1,36 +1,46 @@
 <template>
   <div>
     <h1>Currency Converter</h1>
-    <label for="amount">Amount:</label>
-    <input name="amount" type="number" v-model="toConvert" @change="convert" />
+    <form>
+      <div class="formGroup">
+        <label for="amount">Amount:</label>
+        <input
+          name="amount"
+          type="number"
+          v-model="toConvert"
+          @change="convert"
+        />
+      </div>
 
-    <label for="from">From</label>
-    <select name="from" v-model="fromExchangeRate" @change="convert">
-      <option
-        v-for="(fromExchangeRate, fromCurrencyCode) of exchangeRates"
-        v-bind:key="fromCurrencyCode"
-      >
-        {{ fromCurrencyCode }}
-      </option>
-    </select>
+      <div class="formGroup">
+        <label for="from">From</label>
+        <select name="from" v-model="fromExchangeRate" @change="convert">
+          <option
+            v-for="(fromExchangeRate, fromCurrencyCode) of exchangeRates"
+            v-bind:key="fromCurrencyCode"
+          >
+            {{ fromCurrencyCode }}
+          </option>
+        </select>
+      </div>
 
-    <label for="to">To</label>
-    <select name="to" v-model="toExchangeRate" @change="convert">
-      <option
-        v-for="(toExchangeRate, toCurrencyCode) of exchangeRates"
-        v-bind:key="toCurrencyCode"
-      >
-        {{ toCurrencyCode }}
-      </option>
-    </select>
+      <div class="formGroup">
+        <label for="to">To</label>
+        <select name="to" v-model="toExchangeRate" @change="convert">
+          <option
+            v-for="(toExchangeRate, toCurrencyCode) of exchangeRates"
+            v-bind:key="toCurrencyCode"
+          >
+            {{ toCurrencyCode }}
+          </option>
+        </select>
+      </div>
 
-    <p v-if="fromExchangeRate != undefined && toExchangeRate != undefined">
-      {{ toConvert }}
-      {{ fromExchangeRate }}
-      is equal to
-      {{ converted }}
-      {{ toExchangeRate }}
-    </p>
+      <div class="formGroup">
+        <label for="converted">Converted</label>
+        <input type="number" disabled v-model="converted" />
+      </div>
+    </form>
   </div>
 </template>
 
@@ -43,7 +53,7 @@ export default {
   data() {
     return {
       toConvert: "",
-      converted: 0,
+      converted: "",
       exchangeRates: 1,
       fromExchangeRate: undefined,
       toExchangeRate: undefined
@@ -58,14 +68,39 @@ export default {
 
   methods: {
     convert() {
-      console.log(this.exchangeRates[this.fromExchangeRate]);
-      this.converted =
-        (this.toConvert /
-          parseFloat(this.exchangeRates[this.fromExchangeRate])) *
-        parseFloat(this.exchangeRates[this.toExchangeRate]);
+      if (this.fromExchangeRate != undefined && this.toExchangeRate) {
+        this.converted =
+          (this.toConvert /
+            parseFloat(this.exchangeRates[this.fromExchangeRate])) *
+          parseFloat(this.exchangeRates[this.toExchangeRate]);
+      }
     }
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+h1 {
+  text-align: center;
+}
+form {
+  margin: auto;
+}
+.formGroup {
+  display: inline-block;
+  padding: 0.5em;
+  margin: auto;
+}
+label {
+  display: block;
+}
+input,
+select {
+  width: 100%;
+  font-size: 1.4em;
+  border: none;
+  padding: 10px;
+  background-color: #252626;
+  color: white;
+}
+</style>
